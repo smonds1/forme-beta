@@ -834,8 +834,7 @@ function fmtTime(hrs){ // 9.5 → "9:30 AM"
 function fmtTimeShort(hrs){
   if(hrs===null||hrs===undefined)return '';
   const h=Math.floor(hrs), m=Math.round((hrs-h)*60);
-  const ap=h>=12?'pm':'am', h12=h>12?h-12:h===0?12:h;
-  return h12+(m?':'+(m<10?'0':'')+m:'')+ap;
+  return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
 }
 function quarterLabel(d){
   const m=d.getMonth();
