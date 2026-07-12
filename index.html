@@ -2166,6 +2166,22 @@ function sleepBlocksFor(d){
       if(s===null || !dur) return;
       out.push({name:'Nap', cat:'sleep', start:s, end:s+dur/60, focus:'', _sleep:true, _key:'_nap'+idx});
     });
+  }// Tonight's planned bedtime (stored on tomorrow's wake-date record) → block from bed to midnight
+  const slNext = getSleep(addDays(d,1));
+  if(slNext && !slNext.ignored && slNext.bed){
+    const b = parseTime(slNext.bed);
+    if(b!==null){
+      let tonight;
+      if(slNext.wake){
+        const inf = inferBed(slNext.bed, slNext.wake);
+        tonight = inf ? inf.prevDay : (b>=12);
+      } else {
+        tonight = b>=12; // no wake logged yet — evening times belong to tonight
+      }
+      if(tonight){
+        out.push({name:'Sleep (tonight)', cat:'sleep', start:b, end:24, focus:'', _sleep:true, _key:'_sleepT'});
+      }
+    }
   }
   return out;
 }
